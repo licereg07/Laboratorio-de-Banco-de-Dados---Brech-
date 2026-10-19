@@ -77,4 +77,25 @@ public class ClienteDAO {
             System.out.println("Erro ao excluir cliente: " + ex.getMessage());
         }
     }
+    public List<Cliente> pesquisarPorCPF(String cpf) {
+        List<Cliente> lista = new ArrayList<>();
+        // Busca clientes cujo CPF contenha os números digitados
+        String sql = "SELECT * FROM clientes WHERE cpf LIKE ?";
+        try {
+            PreparedStatement stmt = this.conn.prepareStatement(sql);
+            stmt.setString(1, "%" + cpf + "%");
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Cliente c = new Cliente();
+                c.setId(rs.getInt("id"));
+                c.setNome(rs.getString("nome"));
+                c.setCpf(rs.getString("cpf"));
+                // adicione outros atributos da sua classe Cliente se houver
+                lista.add(c);
+            }
+        } catch (SQLException ex) {
+            System.out.println("Erro ao pesquisar cliente por CPF: " + ex.getMessage());
+        }
+        return lista;
+    }
 }

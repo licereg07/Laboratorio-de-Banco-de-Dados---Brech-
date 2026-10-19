@@ -6,7 +6,10 @@ import beans.Brecho;
 import Conexao.Conexao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BrechoDAO {
     private Conexao conexao;
@@ -156,5 +159,60 @@ public class BrechoDAO {
     }
     return lista;
 }
+    public void atualizarStatusVendido(int idPeca) {
+        String sql = "UPDATE catalogo SET status = 'Vendido' WHERE id = ?";
+        try {
+            PreparedStatement stmt = this.conn.prepareStatement(sql);
+            stmt.setInt(1, idPeca);
+            stmt.execute();
+        } catch (SQLException ex) {
+            System.out.println("Erro ao atualizar status da peça: " + ex.getMessage());
+        }
+    }
+// 1. Listar apenas peças Disponíveis
+    public List<Brecho> listarDisponiveis() {
+        List<Brecho> lista = new ArrayList<>();
+        // Traz apenas quem é Disponivel (ou status nulo/vazio)
+        String sql = "SELECT * FROM catalogo WHERE status IS NULL OR status = '' OR LOWER(status) = 'disponível' OR LOWER(status) = 'disponivel'";
+        
+        try {
+            PreparedStatement stmt = this.conn.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Brecho p = new Brecho();
+                p.setId(rs.getInt("id"));
+                p.setTitulo(rs.getString("titulo"));
+                p.setPreco(rs.getDouble("preco"));
+                p.setStatus(rs.getString("status"));
+                lista.add(p);
+            }
+        } catch (SQLException ex) {
+            System.out.println("Erro ao listar peças disponíveis: " + ex.getMessage());
+        }
+        return lista;
+    }
+
+    // 2. Pesquisar apenas peças Disponíveis
+    public List<Brecho> pesquisarDisponiveis(String termo) {
+        List<Brecho> lista = new ArrayList<>();
+        String sql = "SELECT * FROM catalogo WHERE (status IS NULL OR status = '' OR LOWER(status) = 'disponível' OR LOWER(status) = 'disponivel') AND LOWER(titulo) LIKE LOWER(?)";
+        
+        try {
+            PreparedStatement stmt = this.conn.prepareStatement(sql);
+            stmt.setString(1, "%" + termo + "%");
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Brecho p = new Brecho();
+                p.setId(rs.getInt("id"));
+                p.setTitulo(rs.getString("titulo"));
+                p.setPreco(rs.getDouble("preco"));
+                p.setStatus(rs.getString("status"));
+                lista.add(p);
+            }
+        } catch (SQLException ex) {
+            System.out.println("Erro ao pesquisar peças disponíveis: " + ex.getMessage());
+        }
+        return lista;
+    }
 
 } 

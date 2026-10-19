@@ -77,4 +77,8 @@ public class Brecho {
     public void setStatus(String status) {
         this.status = status;
     }
+    @Override
+    public String toString() {
+        return this.titulo + " - R$ " + String.format("%.2f", this.preco); // Exibe o título e o preço da peça
+    }
 }

@@ -26,7 +26,8 @@ public class VendedorFrame extends javax.swing.JFrame {
                 v.getId(),
                 v.getNome(),
                 v.getCpf(),
-                v.getComissao()
+                v.getTotalVendas()
+                
             });
         }
     }
@@ -41,10 +42,8 @@ public class VendedorFrame extends javax.swing.JFrame {
         tblVendedores = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
         txtNome = new javax.swing.JTextField();
         txtCPF = new javax.swing.JTextField();
-        txtComissao = new javax.swing.JTextField();
         btnSalvar = new javax.swing.JButton();
         btnEditar = new javax.swing.JButton();
         btnExcluir = new javax.swing.JButton();
@@ -99,9 +98,6 @@ public class VendedorFrame extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Verdana", 0, 18)); // NOI18N
         jLabel2.setText("CPF");
 
-        jLabel3.setFont(new java.awt.Font("Verdana", 0, 18)); // NOI18N
-        jLabel3.setText("Comissão (%)");
-
         btnSalvar.setText("Salvar");
         btnSalvar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -140,11 +136,7 @@ public class VendedorFrame extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addComponent(jLabel3)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtComissao, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(jPanel1Layout.createSequentialGroup()
                             .addComponent(btnSalvar)
                             .addGap(18, 18, 18)
@@ -182,13 +174,9 @@ public class VendedorFrame extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel2)
                             .addComponent(txtCPF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(27, 27, 27)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel3)
-                            .addComponent(txtComissao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(41, 41, 41)
+                        .addGap(46, 46, 46)
                         .addComponent(lblTotalVendas)
-                        .addGap(88, 88, 88)
+                        .addGap(136, 136, 136)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnSalvar)
                             .addComponent(btnEditar)
@@ -226,11 +214,11 @@ public class VendedorFrame extends javax.swing.JFrame {
 
             txtNome.setText(tblVendedores.getValueAt(linha, 1).toString());
             txtCPF.setText(tblVendedores.getValueAt(linha, 2) != null ? tblVendedores.getValueAt(linha, 2).toString() : "");
-            txtComissao.setText(tblVendedores.getValueAt(linha, 3) != null ? tblVendedores.getValueAt(linha, 3).toString() : "");
 
-            // Busca e exibe a quantidade total de vendas efetuadas por este vendedor!
-            VendedorDAO vDAO = new VendedorDAO();
-            int totalVendas = vDAO.contarVendas(idEmEdicao);
+            // Pega o número total de vendas diretamente da 4ª coluna da linha selecionada (índice 3)
+            String totalVendas = tblVendedores.getValueAt(linha, 3) != null ? tblVendedores.getValueAt(linha, 3).toString() : "0";
+            
+            // Atualiza o label do formulário
             lblTotalVendas.setText("Vendas Realizadas: " + totalVendas);
         }
     }//GEN-LAST:event_tblVendedoresMouseClicked
@@ -246,12 +234,6 @@ public class VendedorFrame extends javax.swing.JFrame {
         v.setNome(txtNome.getText());
         v.setCpf(txtCPF.getText());
         
-        try {
-            double comissao = Double.parseDouble(txtComissao.getText().replace(",", "."));
-            v.setComissao(comissao);
-        } catch (NumberFormatException e) {
-            v.setComissao(0.0);
-        }
 
         VendedorDAO vDAO = new VendedorDAO();
 
@@ -283,12 +265,6 @@ public class VendedorFrame extends javax.swing.JFrame {
         v.setNome(txtNome.getText());
         v.setCpf(txtCPF.getText());
 
-        try {
-            double comissao = Double.parseDouble(txtComissao.getText().replace(",", "."));
-            v.setComissao(comissao);
-        } catch (NumberFormatException e) {
-            v.setComissao(0.0);
-        }
 
         VendedorDAO vDAO = new VendedorDAO();
         vDAO.editar(v);
@@ -323,7 +299,7 @@ public class VendedorFrame extends javax.swing.JFrame {
 
         txtNome.setText("");
         txtCPF.setText("");
-        txtComissao.setText("");
+        
         lblTotalVendas.setText("Vendas Realizadas: 0");
 
         ehEdicao = false;
@@ -376,14 +352,12 @@ public class VendedorFrame extends javax.swing.JFrame {
     private javax.swing.JButton btnSalvar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblTotalVendas;
     private javax.swing.JTable tblVendedores;
     private javax.swing.JTextField txtCPF;
-    private javax.swing.JTextField txtComissao;
     private javax.swing.JTextField txtNome;
     // End of variables declaration//GEN-END:variables
 }

@@ -4,7 +4,7 @@ public class Vendedor {
     private int id;
     private String nome;
     private String cpf;
-    private double comissao;
+    private int totalVendas;
 
     public Vendedor() {}
 
@@ -28,16 +28,18 @@ public class Vendedor {
     public void setCpf(String cpf) { 
         this.cpf = cpf; 
     }
-
-    public double getComissao() { 
-        return comissao; 
+    
+    public int getTotalVendas() {
+        return totalVendas;
     }
-    public void setComissao(double comissao) { 
-        this.comissao = comissao; 
+
+    public void setTotalVendas(int totalVendas) {
+        this.totalVendas = totalVendas;
     }
 
     @Override
     public String toString() {
         return this.nome;
     }
+
 }

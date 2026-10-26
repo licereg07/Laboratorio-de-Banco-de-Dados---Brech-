@@ -68,7 +68,7 @@ public class BrechoAlice extends javax.swing.JFrame {
         tblPecas = new javax.swing.JTable();
         jLabel20 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         pnlFormulario.setBackground(new java.awt.Color(255, 255, 218));
         pnlFormulario.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Novo Cadastro", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Verdana", 0, 24))); // NOI18N
